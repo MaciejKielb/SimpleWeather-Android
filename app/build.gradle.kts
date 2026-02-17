@@ -3,21 +3,27 @@ plugins {
 }
 
 android {
-    namespace = "com.example.myapplication"
+    namespace = "com.simpleweather.android"
     compileSdk {
         version = release(36) {
             minorApiLevel = 1
         }
     }
 
+    buildFeatures {
+        buildConfig = true
+    }
+
     defaultConfig {
-        applicationId = "com.example.myapplication"
+        applicationId = "com.simpleweather.android"
         minSdk = 24
         targetSdk = 36
         versionCode = 1
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
+        buildConfigField("String", "BASE_URL", "\"https://api.open-meteo.com/\"")
     }
 
     buildTypes {
@@ -44,6 +50,8 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.retrofit.converter.gson)
     testImplementation(libs.junit)
+    testImplementation(libs.mockwebserver)
+    testImplementation(libs.kotlinx.coroutines.test)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 }
