@@ -15,7 +15,7 @@
         android:paddingTop="16dp"
         android:paddingEnd="16dp"
         android:paddingBottom="8dp"
-        android:text="Weather"
+        android:text="@string/weather_title"
         android:textColor="@android:color/white"
         android:textSize="34sp"
         android:textStyle="bold" />
