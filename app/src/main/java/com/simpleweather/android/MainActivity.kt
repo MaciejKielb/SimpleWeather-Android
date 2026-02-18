@@ -3,6 +3,7 @@ package com.simpleweather.android
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -37,7 +38,7 @@ class MainActivity : AppCompatActivity() {
             val container = findViewById<LinearLayout>(R.id.weatherContainer)
             val cities = CityRepository.getCities()
 
-            for (city in cities) {
+            cities.forEachIndexed { index, city ->
                 try {
                     val response = RetrofitInstance.api.getCurrentWeather(
                         latitude = city.latitude,
@@ -52,9 +53,16 @@ class MainActivity : AppCompatActivity() {
                         val temperatureTextView =
                             rowView.findViewById<TextView>(R.id.temperatureTextView)
 
+                        val locationTextView = rowView.findViewById<TextView>(R.id.locationTextView)
+
                         cityNameTextView.text = city.name
                         temperatureTextView.text =
                             getString(R.string.temperature_format, response.current.temperature)
+
+                        if (index == 0) {
+                            locationTextView.text = getString(R.string.my_location)
+                            locationTextView.visibility = View.VISIBLE
+                        }
 
                         container.addView(rowView)
                     }
