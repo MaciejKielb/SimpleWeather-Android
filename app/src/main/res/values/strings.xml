@@ -2,6 +2,5 @@
     <string name="app_name">My Application</string>
     <string name="fetch_weather_data">Weather data</string>
     <string name="fetch_weather_button">Fetch Weather</string>
-    <string name="weather_format">%1$s: %2$.1f°C</string>
-    <string name="weather_fetch_error">Error fetching data</string>
+    <string name="temperature_format">%.0f°</string>
 </resources>

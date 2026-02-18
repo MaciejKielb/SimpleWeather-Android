@@ -2,7 +2,8 @@ package com.simpleweather.android
 
 import android.os.Bundle
 import android.util.Log
-import android.widget.Button
+import android.view.LayoutInflater
+import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
@@ -11,22 +12,18 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.simpleweather.android.data.CityRepository
 import com.simpleweather.android.network.RetrofitInstance
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var weatherTextView: TextView
-    private lateinit var fetchWeatherButton: Button
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContentView(R.layout.activity_main)
-        weatherTextView = findViewById(R.id.weatherTextView)
-        fetchWeatherButton = findViewById(R.id.fetchWeatherButton)
 
-        fetchWeatherButton.setOnClickListener {
-            fetchWeather()
-        }
+        buildWeatherList()
 
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
@@ -35,25 +32,36 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun fetchWeather() {
+    private fun buildWeatherList() {
         lifecycleScope.launch {
-            try {
-                val city = CityRepository.getCities().first()
+            val container = findViewById<LinearLayout>(R.id.weatherContainer)
+            val cities = CityRepository.getCities()
 
-                val response = RetrofitInstance.api.getCurrentWeather(
-                    city.latitude,
-                    city.longitude
-                )
+            for (city in cities) {
+                try {
+                    val response = RetrofitInstance.api.getCurrentWeather(
+                        latitude = city.latitude,
+                        longitude = city.longitude
+                    )
 
-                val temperature = response.current.temperature
-                weatherTextView.text = getString(
-                    R.string.weather_format,
-                    city.name, temperature
-                )
+                    withContext(Dispatchers.Main) {
+                        val rowView = LayoutInflater.from(this@MainActivity)
+                            .inflate(R.layout.item_weather, container, false)
 
-            } catch (e: Exception) {
-                weatherTextView.setText(R.string.weather_fetch_error)
-                Log.e("MainActivity", "Error fetching data", e)
+                        val cityNameTextView = rowView.findViewById<TextView>(R.id.cityNameTextView)
+                        val temperatureTextView =
+                            rowView.findViewById<TextView>(R.id.temperatureTextView)
+
+                        cityNameTextView.text = city.name
+                        temperatureTextView.text =
+                            getString(R.string.temperature_format, response.current.temperature)
+
+                        container.addView(rowView)
+                    }
+
+                } catch (e: Exception) {
+                    Log.e("MainActivity", "Error fetching weather for ${city.name}", e)
+                }
             }
         }
     }
