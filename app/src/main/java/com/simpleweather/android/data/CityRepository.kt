@@ -9,7 +9,7 @@ object CityRepository {
         City("Nicosia",35.1856,33.3823)
     )
 
-    fun GetCities(): List<City> {
+    fun getCities(): List<City> {
         return cities
     }
 }
