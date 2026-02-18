@@ -2,4 +2,5 @@
     <string name="app_name">My Application</string>
     <string name="temperature_format">%.0f°</string>
     <string name="weather_title">Weather</string>
+    <string name="my_location">My Location</string>
 </resources>
