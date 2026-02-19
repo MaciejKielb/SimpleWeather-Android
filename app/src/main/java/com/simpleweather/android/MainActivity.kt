@@ -1,5 +1,6 @@
 package com.simpleweather.android
 
+import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -53,10 +54,14 @@ class MainActivity : AppCompatActivity() {
                     locationTextView.text = getString(R.string.my_location)
                     locationTextView.visibility = View.VISIBLE
                 }
+                rowView.setOnClickListener { navigateToCityDetailScreen() }
 
                 container.addView(rowView)
-
             }
         }
+    }
+    private fun navigateToCityDetailScreen(){
+        val intent = Intent(this, CityDetailActivity::class.java)
+        startActivity(intent)
     }
 }
