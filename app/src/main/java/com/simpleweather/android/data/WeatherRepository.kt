@@ -4,22 +4,31 @@ import android.util.Log
 import com.simpleweather.android.network.RetrofitInstance
 import kotlin.collections.map
 
-data class WeatherDataItem(
+data class WeatherListItem(
     val city: City,
     val temperature: Double
 )
 
+data class WeatherDetailItem(
+    val city: City,
+    val temperature: Double,
+    val weatherCode: Int,
+    val temperatureMin: List<Double>,
+    val temperatureMax: List<Double>
+)
+
 class WeatherRepository {
-    suspend fun fetchWeatherForList(): List<WeatherDataItem> {
+    suspend fun fetchWeatherForList(): List<WeatherListItem> {
         val cities: List<City> = CityRepository.getCities()
 
         return cities.map { city ->
             try {
                 val response = RetrofitInstance.api.getCurrentWeather(
                     latitude = city.latitude,
-                    longitude = city.longitude
+                    longitude = city.longitude,
+                    current = "temperature_2m"
                 )
-                WeatherDataItem(city, response.current.temperature)
+                WeatherListItem(city, response.current.temperature)
 
             } catch (e: Exception) {
                 Log.e("WeatherRepository", "Failed to fetch weather", e)
@@ -28,13 +37,25 @@ class WeatherRepository {
         }.filterNotNull()
     }
 
-    suspend fun fetchWeatherForDetails(city: City): WeatherDataItem? {
+    suspend fun fetchWeatherForDetails(city: City): WeatherDetailItem? {
         try {
             val response = RetrofitInstance.api.getCurrentWeather(
                 latitude = city.latitude,
-                longitude = city.longitude
+                longitude = city.longitude,
+                current = "temperature_2m,weather_code",
+                daily = "temperature_2m_max,temperature_2m_min",
+                forecastDays = 1
             )
-            return WeatherDataItem(city, response.current.temperature)
+
+            return with(response) {
+                WeatherDetailItem(
+                    city,
+                    current.temperature,
+                    current.weatherCode,
+                    daily.temperatureMin,
+                    daily.temperatureMax,
+                )
+            }
         } catch (e: Exception) {
             Log.e("WeatherRepository", "Failed to fetch weather for ${city.name}", e)
             return null

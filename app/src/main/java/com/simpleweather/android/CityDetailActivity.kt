@@ -9,6 +9,7 @@ import androidx.core.view.WindowInsetsCompat
 import androidx.lifecycle.lifecycleScope
 import com.simpleweather.android.data.City
 import com.simpleweather.android.data.WeatherRepository
+import com.simpleweather.android.data.weatherCodeToDescription
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -35,12 +36,19 @@ class CityDetailActivity : AppCompatActivity() {
         lifecycleScope.launch {
             val repository = WeatherRepository()
             val weatherDetail = repository.fetchWeatherForDetails(city)
+            val weatherDescription = weatherCodeToDescription(weatherDetail?.weatherCode ?: -1)
+            val temperatureMin = weatherDetail?.temperatureMin?.first() ?: ""
+            val temperatureMax = weatherDetail?.temperatureMax?.first() ?: ""
 
             withContext(Dispatchers.Main) {
                 weatherDetail?.let {
                     findViewById<TextView>(R.id.cityNameTextView).text = it.city.name
                     findViewById<TextView>(R.id.temperature).text =
                         getString(R.string.temperature_format, it.temperature)
+                    findViewById<TextView>(R.id.weatherDescription).text = weatherDescription
+                    findViewById<TextView>(R.id.temperatureMin).text = "L: $temperatureMin°"
+                    findViewById<TextView>(R.id.temperatureMax).text = "H: $temperatureMax°"
+
                 }
             }
         }
