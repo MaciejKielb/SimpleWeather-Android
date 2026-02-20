@@ -15,7 +15,9 @@ data class CurrentWeather(
     @SerializedName("temperature_2m")
     val temperature: Double,
     @SerializedName("weather_code")
-    val weatherCode: Int
+    val weatherCode: Int?,
+    @SerializedName("wind_speed_10m")
+    val windSpeed: Double?
 )
 
 data class DailyWeather(
@@ -32,8 +34,7 @@ interface WeatherApiService {
         @Query("longitude") longitude: Double,
         @Query("current") current: String,
         @Query("daily") daily: String? = null,
-        @Query("forecast_days") forecastDays: Int? = null
+        @Query("forecast_days") forecastDays: Int? = null,
+        @Query("windSpeed") windSpeed: String? = null,
     ): WeatherData
 }
-
-

@@ -12,9 +12,10 @@ data class WeatherListItem(
 data class WeatherDetailItem(
     val city: City,
     val temperature: Double,
-    val weatherCode: Int,
+    val weatherCode: Int?,
     val temperatureMin: List<Double>,
-    val temperatureMax: List<Double>
+    val temperatureMax: List<Double>,
+    val windSpeed: Double?
 )
 
 class WeatherRepository {
@@ -42,7 +43,7 @@ class WeatherRepository {
             val response = RetrofitInstance.api.getCurrentWeather(
                 latitude = city.latitude,
                 longitude = city.longitude,
-                current = "temperature_2m,weather_code",
+                current = "temperature_2m,weather_code,wind_speed_10m",
                 daily = "temperature_2m_max,temperature_2m_min",
                 forecastDays = 1
             )
@@ -54,6 +55,7 @@ class WeatherRepository {
                     current.weatherCode,
                     daily.temperatureMin,
                     daily.temperatureMax,
+                    current.windSpeed
                 )
             }
         } catch (e: Exception) {

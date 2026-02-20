@@ -37,8 +37,10 @@ class CityDetailActivity : AppCompatActivity() {
             val repository = WeatherRepository()
             val weatherDetail = repository.fetchWeatherForDetails(city)
             val weatherDescription = weatherCodeToDescription(weatherDetail?.weatherCode ?: -1)
-            val temperatureMin = weatherDetail?.temperatureMin?.first() ?: ""
-            val temperatureMax = weatherDetail?.temperatureMax?.first() ?: ""
+            val temperatureMin = weatherDetail?.temperatureMin?.firstOrNull()
+            val temperatureMax = weatherDetail?.temperatureMax?.firstOrNull()
+            val windSpeed = weatherDetail?.windSpeed
+
 
             withContext(Dispatchers.Main) {
                 weatherDetail?.let {
@@ -48,7 +50,7 @@ class CityDetailActivity : AppCompatActivity() {
                     findViewById<TextView>(R.id.weatherDescription).text = weatherDescription
                     findViewById<TextView>(R.id.temperatureMin).text = "L: $temperatureMin°"
                     findViewById<TextView>(R.id.temperatureMax).text = "H: $temperatureMax°"
-
+                    findViewById<TextView>(R.id.windSpeedTextView).text = "Wind: $windSpeed km/h"
                 }
             }
         }

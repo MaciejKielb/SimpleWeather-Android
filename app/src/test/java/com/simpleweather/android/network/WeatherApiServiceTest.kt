@@ -19,23 +19,25 @@ class WeatherApiServiceTest {
 
     @Before
     fun Setup() {
-        val retrofit = Retrofit.Builder()
-            .baseUrl(mockWebServer.url("/"))
-            .addConverterFactory(GsonConverterFactory.create())
-            .build()
+        val retrofit = Retrofit.Builder().baseUrl(mockWebServer.url("/"))
+            .addConverterFactory(GsonConverterFactory.create()).build()
         api = retrofit.create(WeatherApiService::class.java)
     }
 
     @Test
     fun `get current weather - returns correct data`() = runTest {
 
-        val mockResponse = MockResponse()
-            .setBody(readFileFromResources("success_weather_response.json"))
-            .setResponseCode(200)
+        val mockResponse =
+            MockResponse().setBody(readFileFromResources("success_weather_response.json"))
+                .setResponseCode(200)
 
         mockWebServer.enqueue(mockResponse)
 
-        val response = api.getCurrentWeather(latitude = 54.27, longitude = 17.01)
+        val response = api.getCurrentWeather(
+            latitude = 54.27,
+            longitude = 17.01,
+            current = "temperature_2m"
+        )
 
         Assert.assertEquals(-8.9, response.current.temperature, 0.0)
     }
