@@ -13,7 +13,6 @@ import com.simpleweather.android.data.weatherCodeToDescription
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import kotlin.jvm.java
 
 class CityDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -34,8 +33,7 @@ class CityDetailActivity : AppCompatActivity() {
         val city = intent.getParcelableExtra("EXTRA_CITY", City::class.java) ?: return
 
         lifecycleScope.launch {
-            val repository = WeatherRepository()
-            val weatherDetail = repository.fetchWeatherForDetails(city)
+            val weatherDetail = WeatherRepository.fetchWeatherForDetails(city)
             val weatherDescription = weatherCodeToDescription(weatherDetail?.weatherCode ?: -1)
             val temperatureMin = weatherDetail?.temperatureMin
             val temperatureMax = weatherDetail?.temperatureMax
@@ -48,9 +46,12 @@ class CityDetailActivity : AppCompatActivity() {
                     findViewById<TextView>(R.id.temperature).text =
                         getString(R.string.temperature_format, it.temperature)
                     findViewById<TextView>(R.id.weatherDescription).text = weatherDescription
-                    findViewById<TextView>(R.id.temperatureMin).text = "L: $temperatureMin°"
-                    findViewById<TextView>(R.id.temperatureMax).text = "H: $temperatureMax°"
-                    findViewById<TextView>(R.id.windSpeedTextView).text = "Wind: $windSpeed km/h"
+                    findViewById<TextView>(R.id.temperatureMin).text =
+                        getString(R.string.temp_min_format, temperatureMin?.toInt())
+                    findViewById<TextView>(R.id.temperatureMax).text =
+                        getString(R.string.temp_max_format, temperatureMax?.toInt())
+                    findViewById<TextView>(R.id.windSpeedTextView).text =
+                        getString(R.string.wind_speed_format, windSpeed)
                 }
             }
         }
