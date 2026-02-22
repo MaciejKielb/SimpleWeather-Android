@@ -18,13 +18,14 @@ data class WeatherDetailItem(
     val windSpeed: Double?
 )
 
-class WeatherRepository {
-    suspend fun fetchWeatherForList(): List<WeatherListItem> {
-        val cities: List<City> = CityRepository.getCities()
+object WeatherRepository {
+    private val api = RetrofitInstance.api
 
+    suspend fun fetchWeatherForList(): List<WeatherListItem> {
+        val cities = CityRepository.getCities()
         return cities.map { city ->
             try {
-                val response = RetrofitInstance.api.getCurrentWeather(
+                val response = api.getCurrentWeather(
                     latitude = city.latitude,
                     longitude = city.longitude,
                     current = "temperature_2m"
@@ -40,7 +41,7 @@ class WeatherRepository {
 
     suspend fun fetchWeatherForDetails(city: City): WeatherDetailItem? {
         try {
-            val response = RetrofitInstance.api.getCurrentWeather(
+            val response = api.getCurrentWeather(
                 latitude = city.latitude,
                 longitude = city.longitude,
                 current = "temperature_2m,weather_code,wind_speed_10m",

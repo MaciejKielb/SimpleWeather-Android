@@ -33,8 +33,7 @@ class MainActivity : AppCompatActivity() {
 
     private fun buildWeatherList() {
         lifecycleScope.launch {
-            val repository = WeatherRepository()
-            val weatherItems = repository.fetchWeatherForList()
+            val weatherItems = WeatherRepository.fetchWeatherForList()
             val container = findViewById<LinearLayout>(R.id.weatherContainer)
 
             weatherItems.forEachIndexed { index, item ->
