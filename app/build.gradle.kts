@@ -5,12 +5,7 @@ plugins {
 
 android {
     namespace = "com.simpleweather.android"
-    compileSdk {
-        version = release(36) {
-            minorApiLevel = 1
-        }
-    }
-
+    compileSdk = 36
     buildFeatures {
         buildConfig = true
     }

@@ -13,8 +13,8 @@ data class WeatherDetailItem(
     val city: City,
     val temperature: Double,
     val weatherCode: Int?,
-    val temperatureMin: List<Double>,
-    val temperatureMax: List<Double>,
+    val temperatureMin: Double?,
+    val temperatureMax: Double?,
     val windSpeed: Double?
 )
 
@@ -53,8 +53,8 @@ class WeatherRepository {
                     city,
                     current.temperature,
                     current.weatherCode,
-                    daily.temperatureMin,
-                    daily.temperatureMax,
+                    daily?.temperatureMin?.firstOrNull(),
+                    daily?.temperatureMax?.firstOrNull(),
                     current.windSpeed
                 )
             }

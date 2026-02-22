@@ -37,8 +37,8 @@ class CityDetailActivity : AppCompatActivity() {
             val repository = WeatherRepository()
             val weatherDetail = repository.fetchWeatherForDetails(city)
             val weatherDescription = weatherCodeToDescription(weatherDetail?.weatherCode ?: -1)
-            val temperatureMin = weatherDetail?.temperatureMin?.firstOrNull()
-            val temperatureMax = weatherDetail?.temperatureMax?.firstOrNull()
+            val temperatureMin = weatherDetail?.temperatureMin
+            val temperatureMax = weatherDetail?.temperatureMax
             val windSpeed = weatherDetail?.windSpeed
 
 

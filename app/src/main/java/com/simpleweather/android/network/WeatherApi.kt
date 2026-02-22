@@ -8,7 +8,7 @@ data class WeatherData(
     @SerializedName("current")
     val current: CurrentWeather,
     @SerializedName("daily")
-    val daily: DailyWeather
+    val daily: DailyWeather?
 )
 
 data class CurrentWeather(
@@ -35,6 +35,5 @@ interface WeatherApiService {
         @Query("current") current: String,
         @Query("daily") daily: String? = null,
         @Query("forecast_days") forecastDays: Int? = null,
-        @Query("windSpeed") windSpeed: String? = null,
     ): WeatherData
 }
