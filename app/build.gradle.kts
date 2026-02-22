@@ -10,7 +10,6 @@ android {
             minorApiLevel = 1
         }
     }
-
     buildFeatures {
         buildConfig = true
     }
