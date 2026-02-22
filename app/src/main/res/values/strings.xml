@@ -1,6 +1,9 @@
 <resources>
-    <string name="app_name">My Application</string>
+    <string name="app_name">Simple Weather</string>
     <string name="temperature_format">%.0f°</string>
     <string name="weather_title">Weather</string>
     <string name="my_location">My Location</string>
+    <string name="temp_min_format">L: %1$d°</string>
+    <string name="temp_max_format">H: %1$d°</string>
+    <string name="wind_speed_format">Wind: %.1f km/h</string>
 </resources>

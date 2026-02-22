@@ -18,7 +18,7 @@ class WeatherApiServiceTest {
     private lateinit var api: WeatherApiService
 
     @Before
-    fun Setup() {
+    fun setup() {
         val retrofit = Retrofit.Builder().baseUrl(mockWebServer.url("/"))
             .addConverterFactory(GsonConverterFactory.create()).build()
         api = retrofit.create(WeatherApiService::class.java)
